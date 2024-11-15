@@ -1,5 +1,7 @@
 package com.example.application.views.myview;
 
+import com.example.application.models.Vote;
+import com.example.application.models.VoteService;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -9,12 +11,16 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @PageTitle("My View")
 @Route("")
 public class MyViewView extends Composite<VerticalLayout> {
     private int vote1Count = 0;
     private int vote2Count = 0;
+    @Autowired
+    private VoteService voteService;
 
     // components & layouts
     VerticalLayout layoutColumn2 = new VerticalLayout();
@@ -39,11 +45,17 @@ public class MyViewView extends Composite<VerticalLayout> {
     }
 
     public void incVote1Count() {
-        this.vote1Count++;
+        Vote vote = this.voteService.voteFor("vote1");
+        if (vote != null) {
+            this.vote1Count = vote.getVote();
+        }
     }
 
     public void incVote2Count() {
-        this.vote2Count++;
+        Vote vote = this.voteService.voteFor("vote2");
+        if (vote != null) {
+            this.vote2Count = vote.getVote();
+        }
     }
 
     private void layout() {
